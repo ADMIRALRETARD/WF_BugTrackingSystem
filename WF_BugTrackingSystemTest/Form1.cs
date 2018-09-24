@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WF_BugTrackingSystemTest.AdditionalForms;
 
 namespace WF_BugTrackingSystemTest
 {
@@ -19,6 +20,10 @@ namespace WF_BugTrackingSystemTest
         FormTaskAdd ftAdd;
         FormUserAdd fuAdd;
         FormProjectAdd fpAdd;
+        FormSelect fs;
+        DeleteVal dv;
+
+
         OpenFileDialog _openFileDialog = new OpenFileDialog();
 
         public string sqlQuery = Queries.showTasks;  // Default display
@@ -30,6 +35,8 @@ namespace WF_BugTrackingSystemTest
             ftAdd = new FormTaskAdd(this);
             fuAdd = new FormUserAdd(this);
             fpAdd = new FormProjectAdd(this);
+            fs = new FormSelect(this);
+            dv=new DeleteVal(this);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,17 +46,12 @@ namespace WF_BugTrackingSystemTest
         }
         public void DbConnection()
         {
-            //_openFileDialog.Filter = "DataBase Files(*.db;*.sdb;*.sqlite;*.db3;*.s3db;*.sqlite3;*.sl3;)|";
-            //if (_openFileDialog.ShowDialog() == DialogResult.Cancel) 
-            //    return;
-            //string filename = _openFileDialog.FileName;
-            //db = new SQLiteConnection("Data Source="+filename+";"+"Version=3");
-
-            db = new SQLiteConnection("Data Source=C:\\Users" +
-               "\\Gercules\\Documents\\Visual Studio 2017\\Projects\\" +
-               "WF_BugTrackingSystemTest\\WF_BugTrackingSystemTest\\bin\\Debug\\BugTrackerDB.db;" +
-               "Version=3");
-
+            
+            //db = new SQLiteConnection("Data Source=C:\\Users" +
+            //   "\\Gercules\\Documents\\Visual Studio 2017\\Projects\\" +
+            //   "WF_BugTrackingSystemTest\\WF_BugTrackingSystemTest\\bin\\Debug\\BugTrackerDB.db;" +
+            //   "Version=3");
+            db = new SQLiteConnection("Data Source=BugTrackerDB.db;Version=3");
             db.Open();
 
         }
@@ -68,15 +70,6 @@ namespace WF_BugTrackingSystemTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //string addCommand = "INSERT INTO TASKS(ProjectID,Theme,Type,Priority, UserID, Description) values('2', 'Тема22', 'Тип1', 'asdsada', '1', 'qqqwewq')";
-            ////string deleteCommand = "DELETE FROM TASKS WHERE Theme='Тема77'";
-            //SQLiteCommand cmd = db.CreateCommand();
-            //cmd.CommandText = addCommand;
-            //// cmd.CommandText = deleteCommand;
-            //cmd.ExecuteNonQuery();
-
-            //ShowDataGrid();
-
             switch (tablename)
             {
                 case "Users":
@@ -90,12 +83,12 @@ namespace WF_BugTrackingSystemTest
                     break;
 
             }
-
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            Delete();
+            dv.Delete();
+          //  Delete();
         }
         private void cbTables_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -119,15 +112,51 @@ namespace WF_BugTrackingSystemTest
             }
         }
 
-        private void Delete()
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string deleteCommand = "DELETE FROM " + tablename + " WHERE ID=@id";
-            SQLiteCommand cmd = db.CreateCommand();
-            cmd.CommandText = deleteCommand;
-            cmd.Parameters.Add("@id", DbType.Int32).Value = dataGridView1.CurrentRow.Cells[0].Value;
-            cmd.ExecuteNonQuery();
-            ShowDataGrid(sqlQuery);
+            ActiveForm.Close();
         }
+
+        private void UserListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowDataGrid(Queries.showUsers);
+        }
+
+        private void ProjectListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowDataGrid(Queries.showProjects);
+        }
+        
+        private void TasksInProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           
+            fs.ShowDialog();
+        }
+
+        private void UserTasksListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            fs.ShowDialog();
+        }
+
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _openFileDialog.Filter = "DataBase Files(*.db;*.sdb;*.sqlite;*.db3;*.s3db;*.sqlite3;*.sl3;)|";
+            if (_openFileDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            string filename = _openFileDialog.FileName;
+            db = new SQLiteConnection("Data Source=" + filename + ";" + "Version=3");
+        }
+        //2 Вариант
+        //private void Delete()
+        //{
+        //    string deleteCommand = "DELETE FROM " + tablename + " WHERE ID=@id";
+        //    SQLiteCommand cmd = db.CreateCommand();
+        //    cmd.CommandText = deleteCommand;
+        //    cmd.Parameters.Add("@id", DbType.Int32).Value = dataGridView1.CurrentRow.Cells[0].Value;
+        //    cmd.ExecuteNonQuery();
+        //    ShowDataGrid(sqlQuery);
+        //}
 
     }
 }
