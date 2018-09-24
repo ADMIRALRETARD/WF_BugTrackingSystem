@@ -69,19 +69,38 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormProjectAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProjectAdd.Designer.cs">
+      <DependentUpon>FormProjectAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTaskAdd.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormTaskAdd.Designer.cs">
       <DependentUpon>FormTaskAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUserAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUserAdd.Designer.cs">
+      <DependentUpon>FormUserAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormProjectAdd.resx">
+      <DependentUpon>FormProjectAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormTaskAdd.resx">
       <DependentUpon>FormTaskAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUserAdd.resx">
+      <DependentUpon>FormUserAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -48,29 +48,29 @@
             this.tbTheme.Location = new System.Drawing.Point(92, 59);
             this.tbTheme.Name = "tbTheme";
             this.tbTheme.Size = new System.Drawing.Size(169, 20);
-            this.tbTheme.TabIndex = 0;
+            this.tbTheme.TabIndex = 1;
             // 
             // tbType
             // 
             this.tbType.Location = new System.Drawing.Point(92, 89);
             this.tbType.Name = "tbType";
-            this.tbType.Size = new System.Drawing.Size(100, 20);
-            this.tbType.TabIndex = 1;
+            this.tbType.Size = new System.Drawing.Size(169, 20);
+            this.tbType.TabIndex = 2;
             // 
             // tbPriority
             // 
             this.tbPriority.Location = new System.Drawing.Point(92, 119);
             this.tbPriority.Name = "tbPriority";
-            this.tbPriority.Size = new System.Drawing.Size(100, 20);
-            this.tbPriority.TabIndex = 2;
+            this.tbPriority.Size = new System.Drawing.Size(169, 20);
+            this.tbPriority.TabIndex = 3;
             // 
             // tbDescrition
             // 
-            this.tbDescrition.Location = new System.Drawing.Point(92, 196);
+            this.tbDescrition.Location = new System.Drawing.Point(91, 196);
             this.tbDescrition.Multiline = true;
             this.tbDescrition.Name = "tbDescrition";
-            this.tbDescrition.Size = new System.Drawing.Size(281, 20);
-            this.tbDescrition.TabIndex = 3;
+            this.tbDescrition.Size = new System.Drawing.Size(281, 53);
+            this.tbDescrition.TabIndex = 5;
             // 
             // lblProject
             // 
@@ -111,7 +111,7 @@
             // lblExecutor
             // 
             this.lblExecutor.AutoSize = true;
-            this.lblExecutor.Location = new System.Drawing.Point(12, 156);
+            this.lblExecutor.Location = new System.Drawing.Point(12, 159);
             this.lblExecutor.Name = "lblExecutor";
             this.lblExecutor.Size = new System.Drawing.Size(74, 13);
             this.lblExecutor.TabIndex = 8;
@@ -120,7 +120,7 @@
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(12, 199);
+            this.lblDescription.Location = new System.Drawing.Point(12, 196);
             this.lblDescription.Name = "lblDescription";
             this.lblDescription.Size = new System.Drawing.Size(57, 13);
             this.lblDescription.TabIndex = 9;
@@ -128,23 +128,24 @@
             // 
             // cbProjects
             // 
-            this.cbProjects.FormattingEnabled = true;
+            this.cbProjects.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProjects.Location = new System.Drawing.Point(92, 29);
             this.cbProjects.Name = "cbProjects";
-            this.cbProjects.Size = new System.Drawing.Size(121, 21);
-            this.cbProjects.TabIndex = 10;
+            this.cbProjects.Size = new System.Drawing.Size(169, 21);
+            this.cbProjects.TabIndex = 0;
             // 
             // cbUsers
             // 
+            this.cbUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbUsers.FormattingEnabled = true;
-            this.cbUsers.Location = new System.Drawing.Point(92, 156);
+            this.cbUsers.Location = new System.Drawing.Point(92, 151);
             this.cbUsers.Name = "cbUsers";
-            this.cbUsers.Size = new System.Drawing.Size(121, 21);
-            this.cbUsers.TabIndex = 11;
+            this.cbUsers.Size = new System.Drawing.Size(169, 21);
+            this.cbUsers.TabIndex = 4;
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(298, 255);
+            this.btnAdd.Location = new System.Drawing.Point(297, 255);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 12;
@@ -156,7 +157,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 306);
+            this.ClientSize = new System.Drawing.Size(384, 283);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.cbUsers);
             this.Controls.Add(this.cbProjects);
@@ -171,7 +172,9 @@
             this.Controls.Add(this.tbType);
             this.Controls.Add(this.tbTheme);
             this.Name = "FormTaskAdd";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавить задачу";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTaskAdd_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

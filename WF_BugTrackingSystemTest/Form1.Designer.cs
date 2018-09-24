@@ -38,10 +38,14 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(1, 140);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(802, 228);
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(868, 277);
             this.dataGridView1.TabIndex = 0;
             // 
             // btnAdd
@@ -57,10 +61,16 @@
             // cbTables
             // 
             this.cbTables.FormattingEnabled = true;
-            this.cbTables.Location = new System.Drawing.Point(1, 62);
+            this.cbTables.Items.AddRange(new object[] {
+            "Задачи",
+            "Проекты",
+            "Пользователи"});
+            this.cbTables.Location = new System.Drawing.Point(1, 113);
             this.cbTables.Name = "cbTables";
-            this.cbTables.Size = new System.Drawing.Size(121, 21);
+            this.cbTables.Size = new System.Drawing.Size(118, 21);
             this.cbTables.TabIndex = 2;
+            this.cbTables.Text = "Задачи";
+            this.cbTables.SelectedValueChanged += new System.EventHandler(this.cbTables_SelectedValueChanged);
             // 
             // btnDel
             // 
@@ -86,7 +96,7 @@
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.dataGridView1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "BugTrackingSystem";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -94,12 +104,11 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.ComboBox cbTables;
         private System.Windows.Forms.Button btnDel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.ComboBox cbTables;
+        public System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 

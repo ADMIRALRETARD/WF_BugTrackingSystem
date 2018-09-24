@@ -25,8 +25,8 @@ namespace WF_BugTrackingSystemTest
             f1 = frm;
             frm.DbConnection();
 
-            string selectProjects = "Select  ProjectName From Projects";
-            string selectUsers = "Select LastName from Users";
+            string selectProjects = "Select  ID,ProjectName From Projects";
+            string selectUsers = "Select ID,LastName from Users";
 
             LoadData(selectProjects);
             LoadData(selectUsers);
@@ -37,51 +37,59 @@ namespace WF_BugTrackingSystemTest
             DataTable dt = new DataTable();
             adapter1.Fill(dt);
 
-
-
             if (dt.Columns.Contains("ProjectName"))
             {
-
                 foreach (DataRow row in dt.Rows)
                 {
                     var cells = row.ItemArray;
-                    foreach (object cell in cells)
-                    {
-
-                        cbProjects.Items.Add(cell);
-                    }
+                    cbProjects.Items.Add(cells.GetValue(0) + " [ID] , " + cells.GetValue(1));
                 }
             }
             else
-
                 foreach (DataRow row in dt.Rows)
                 {
                     var cells = row.ItemArray;
-                    foreach (object cell in cells)
-                    {
-                        cbUsers.Items.Add(cell);
-                    }
+                    cbUsers.Items.Add(cells.GetValue(0) + " [ID] , " + cells.GetValue(1));
                 }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string addCommand = "INSERT INTO TASKS(ProjectID,Theme,Type,Priority, UserID, Description) " +
-                                "values(@projectID, @theme, @type, @priority, @userID, @description)";
+            try
+            {
+                string addCommand = "INSERT INTO TASKS(ProjectID,Theme,Type,Priority, UserID, Description) " +
+                                    "values(@projectID, @theme, @type, @priority, @userID, @description)";
 
-            SQLiteCommand command = f1.db.CreateCommand();
-            command.CommandText = addCommand;
-            command.Parameters.Add("@projectID", DbType.Int32).Value = cbProjects.SelectedIndex;
-            command.Parameters.Add("@theme", DbType.String).Value = tbTheme.Text;
-            command.Parameters.Add("@type", DbType.String).Value = tbType.Text;
-            command.Parameters.Add("@priority", DbType.String).Value = tbPriority.Text;
-            command.Parameters.Add("@userID", DbType.Int32).Value = cbUsers.SelectedIndex;
-            command.Parameters.Add("@description", DbType.String).Value = tbDescrition.Text;
+                SQLiteCommand command = f1.db.CreateCommand();
+                command.CommandText = addCommand;
 
-            command.ExecuteNonQuery();
+                if (tbDescrition.Text != " " && tbPriority.Text != " " && tbTheme.Text != " " && tbType.Text != " "
+                    && cbProjects.Text != " " && cbUsers.Text != " ")
+                {
 
+                    command.Parameters.Add("@projectID", DbType.Int32).Value = cbProjects.Text.Substring(0, 1);
+                    command.Parameters.Add("@theme", DbType.String).Value = tbTheme.Text;
+                    command.Parameters.Add("@type", DbType.String).Value = tbType.Text;
+                    command.Parameters.Add("@priority", DbType.String).Value = tbPriority.Text;
+                    command.Parameters.Add("@userID", DbType.Int32).Value = cbUsers.Text.Substring(0, 1);
+                    command.Parameters.Add("@description", DbType.String).Value = tbDescrition.Text;
 
-            ActiveForm.Close();
+                    command.ExecuteNonQuery();
+                    ActiveForm.Close();
+                }
+                else
+                    MessageBox.Show("Не все поля заполнены!");
+            }
+
+            catch (Exception)
+            {
+            }
+
+        }
+
+        private void FormTaskAdd_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            f1.ShowDataGrid(Queries.showTasks);
         }
     }
 }

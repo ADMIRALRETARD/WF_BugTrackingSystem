@@ -17,3 +17,5 @@ c:\users\gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest
 C:\Users\Gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest\WF_BugTrackingSystemTest\obj\Debug\WF_BugTrackingSystemTest.Form1.resources
 C:\Users\Gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest\WF_BugTrackingSystemTest\obj\Debug\WF_BugTrackingSystemTest.FormTaskAdd.resources
 C:\Users\Gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest\WF_BugTrackingSystemTest\obj\Debug\WF_BugTrackingSystemTest.csprojResolveAssemblyReference.cache
+C:\Users\Gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest\WF_BugTrackingSystemTest\obj\Debug\WF_BugTrackingSystemTest.FormUserAdd.resources
+C:\Users\Gercules\documents\visual studio 2017\Projects\WF_BugTrackingSystemTest\WF_BugTrackingSystemTest\obj\Debug\WF_BugTrackingSystemTest.FormProjectAdd.resources

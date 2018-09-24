@@ -14,25 +14,28 @@ namespace WF_BugTrackingSystemTest
     public partial class Form1 : Form
     {
         public SQLiteConnection db;
-        
-
+        string tablename;
 
         FormTaskAdd ftAdd;
+        FormUserAdd fuAdd;
+        FormProjectAdd fpAdd;
+        OpenFileDialog _openFileDialog = new OpenFileDialog();
 
-        OpenFileDialog _openFileDialog=new OpenFileDialog();
+        public string sqlQuery = Queries.showTasks;  // Default display
+
+
         public Form1()
         {
             InitializeComponent();
             ftAdd = new FormTaskAdd(this);
-           
+            fuAdd = new FormUserAdd(this);
+            fpAdd = new FormProjectAdd(this);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             DbConnection();
-            ShowDataGrid();
-
-
+            ShowDataGrid(sqlQuery);
         }
         public void DbConnection()
         {
@@ -49,29 +52,20 @@ namespace WF_BugTrackingSystemTest
 
             db.Open();
 
-           
-
         }
-        private void ShowDataGrid()
+        public void ShowDataGrid(string query)
         {
-            string selectCommand = "select Projects.ProjectName,Theme,Type,Priority,Users.LastName,Description " +
-                                    "from Tasks inner  join Projects on Tasks.ProjectID = Projects.ID " +
-                                    "inner join Users on Tasks.UserID = Users.ID";
-
-            //string showUsers = "select * from users";                 ОТОБРАЖЕНИЕ ПОЛЬЗОВАТЕЛЕЙ
-            //string showProjects="select *from projects";          //  ОТОБРАЖЕНИЕ ПРОЕКТОВ
-            // string showTasks = "select *from Tasks";                // ОТОБРАЖЕНИЕ ЗАДАЧ
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter(selectCommand, db);
-
+            sqlQuery = query;
+            SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, db);
             DataSet ds = new DataSet();
             adapter.Fill(ds);
-
             foreach (DataTable dt in ds.Tables)
             {
                 dataGridView1.DataSource = dt;
             }
 
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             //string addCommand = "INSERT INTO TASKS(ProjectID,Theme,Type,Priority, UserID, Description) values('2', 'Тема22', 'Тип1', 'asdsada', '1', 'qqqwewq')";
@@ -83,12 +77,57 @@ namespace WF_BugTrackingSystemTest
 
             //ShowDataGrid();
 
-            ftAdd.ShowDialog();
+            switch (tablename)
+            {
+                case "Users":
+                    fuAdd.ShowDialog();
+                    break;
+                case "Projects":
+                    fpAdd.ShowDialog();
+                    break;
+                default:
+                    ftAdd.ShowDialog();
+                    break;
+
+            }
+
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            
+            Delete();
         }
+        private void cbTables_SelectedValueChanged(object sender, EventArgs e)
+        {
+            switch (cbTables.Text)
+            {
+                case "Пользователи":
+                    tablename = "Users";
+                    sqlQuery = Queries.showUsers;
+                    ShowDataGrid(sqlQuery);
+                    break;
+                case "Проекты":
+                    tablename = "Projects";
+                    sqlQuery = Queries.showProjects;
+                    ShowDataGrid(sqlQuery);
+                    break;
+                default:
+                    tablename = "Tasks";
+                    sqlQuery = Queries.showTasks;
+                    ShowDataGrid(sqlQuery);
+                    break;
+            }
+        }
+
+        private void Delete()
+        {
+            string deleteCommand = "DELETE FROM " + tablename + " WHERE ID=@id";
+            SQLiteCommand cmd = db.CreateCommand();
+            cmd.CommandText = deleteCommand;
+            cmd.Parameters.Add("@id", DbType.Int32).Value = dataGridView1.CurrentRow.Cells[0].Value;
+            cmd.ExecuteNonQuery();
+            ShowDataGrid(sqlQuery);
+        }
+
     }
 }
