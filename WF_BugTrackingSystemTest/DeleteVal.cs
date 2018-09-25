@@ -11,14 +11,12 @@ namespace WF_BugTrackingSystemTest
     public class DeleteVal
     {
         Form1 form1;
-
-        SQLiteConnection db;
+        
         public DeleteVal(Form1 form)
         {
             form1 = form;
-            db = form.DbConnection();
-        }
 
+        }
 
         private string FindTable()
         {
@@ -40,22 +38,52 @@ namespace WF_BugTrackingSystemTest
         {
             try
             {
+                string deleteCommand = "DELETE FROM " + FindTable() + " WHERE ID=@id";
+                using (var db = form1.DbConnection())
+                {
+                    SQLiteCommand cmd = db.CreateCommand();
+                    cmd.CommandText = deleteCommand;
 
-            string deleteCommand = "DELETE FROM " + FindTable() + " WHERE ID=@id";
-            using (db=form1.DbConnection())
-            {
+                    cmd.Parameters.Add("@id", System.Data.DbType.Int32).Value = form1.dataGridView1.CurrentRow.Cells[0].Value;
 
-                SQLiteCommand cmd = db.CreateCommand();
-                cmd.CommandText = deleteCommand;
+                    if (FindTable() == "Users")
+                    {
+                        if (MessageBox.Show("Вы уверены? При удалении этого пользователя " +
+                            "будут удалены все соответстсвующие задачи. " +
+                            "Продолжить?", "Удалить", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        {
+                            if (cmd.ExecuteNonQuery() > 0)
+                            {
+                                cmd.CommandText = "Delete From Tasks Where UserID=@id";
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Данные удалены");
+                            }
+                        }
 
-                cmd.Parameters.Add("@id", System.Data.DbType.Int32).Value = form1.dataGridView1.CurrentRow.Cells[0].Value;
+                    }
+                    else if (FindTable() == "Projects")
+                    {
 
-                cmd.ExecuteNonQuery();
-               
+                        if (MessageBox.Show("Вы уверены? При удалении этого проекта " +
+                            "будут удалены все соответстсвующие задачи. " +
+                            "Продолжить?", "Удалить", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        {
+                            if (cmd.ExecuteNonQuery() > 0)
+                            {
+                                cmd.CommandText = "Delete From Tasks Where ProjectID=@id";
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Данные удалены");
+                            }
+                        }
+                    }
+                    else
+                        cmd.ExecuteNonQuery();
+                }
+                
             }
-            }catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка удаленияй", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -15,14 +15,11 @@ namespace WF_BugTrackingSystemTest
 {
     public partial class Form1 : Form
     {
-        public SQLiteConnection db;
+       
         SQLiteCommand cmd;
         string tablename;
         string flag;
         
-        DeleteVal dv;
-
-
         OpenFileDialog _openFileDialog = new OpenFileDialog();
 
         public string sqlQuery = Queries.showTasks;  // Default display
@@ -31,9 +28,6 @@ namespace WF_BugTrackingSystemTest
         public Form1()
         {
             InitializeComponent();
-            
-            dv = new DeleteVal(this);
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -43,11 +37,10 @@ namespace WF_BugTrackingSystemTest
         public SQLiteConnection DbConnection()
         {
 
-            //db = new SQLiteConnection("Data Source=C:\\Users" +
-            //   "\\Gercules\\Documents\\Visual Studio 2017\\Projects\\" +
-            //   "WF_BugTrackingSystemTest\\WF_BugTrackingSystemTest\\bin\\Debug\\BugTrackerDB.db;" +
-            //   "Version=3");
+           //SQLiteConnection db = new SQLiteConnection("Data Source=C:\\Users\\Gercules\\Documents\\tz\\BugTrackerDB.db;Version=3");
+            
             SQLiteConnection db = new SQLiteConnection("Data Source=BugTrackerDB.db;Version=3");
+            
             cmd = new SQLiteCommand();
             cmd.Connection = db;
             db.Open();
@@ -57,9 +50,9 @@ namespace WF_BugTrackingSystemTest
         {
             sqlQuery = query;
             DataSet ds = new DataSet();
-            cmd.CommandText = sqlQuery;
-            using (db = DbConnection())
+            using (var db = DbConnection())
             {
+            cmd.CommandText = sqlQuery;
 
                 using (var adapter = new SQLiteDataAdapter(sqlQuery, db))
                 {
@@ -113,6 +106,7 @@ namespace WF_BugTrackingSystemTest
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            DeleteVal dv = new DeleteVal(this);
             dv.Delete();
             ShowDataGrid(sqlQuery);
         }
@@ -161,8 +155,6 @@ namespace WF_BugTrackingSystemTest
                 if (fs.ShowDialog() == DialogResult.OK)
                 { return; }
             }
-
-            
         }
 
         private void UserTasksListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -172,18 +164,17 @@ namespace WF_BugTrackingSystemTest
             {
                 if (fs.ShowDialog() == DialogResult.OK)
                 { return; }
-            }
-
-            
+            }   
         }
-
+        
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _openFileDialog.Filter = "DataBase Files(*.db;*.sdb;*.sqlite;*.db3;*.s3db;*.sqlite3;*.sl3;)|";
             if (_openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             string filename = _openFileDialog.FileName;
-            db = new SQLiteConnection("Data Source=" + filename + ";" + "Version=3");
+           var db = new SQLiteConnection("Data Source=" + filename + ";" + "Version=3");
+            
         }
        
 

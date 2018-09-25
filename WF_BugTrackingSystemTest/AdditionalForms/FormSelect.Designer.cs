@@ -69,6 +69,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbSelect);
             this.Name = "FormSelect";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Выбор";
             this.ResumeLayout(false);
             this.PerformLayout();

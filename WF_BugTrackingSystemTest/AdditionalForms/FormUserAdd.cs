@@ -14,13 +14,13 @@ namespace WF_BugTrackingSystemTest
     public partial class FormUserAdd : Form
     {
         private Form1 f1;
-        SQLiteConnection db;
+        
         public FormUserAdd(Form1 frm)
         {
             InitializeComponent();
 
             f1 = frm;
-            db = f1.DbConnection();
+            
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -28,7 +28,7 @@ namespace WF_BugTrackingSystemTest
             try
             {
                 string addCommand = "INSERT INTO USERS(FirstName,LastName) VALUES(@FirstName,@LastName)";
-                using (db = f1.DbConnection())
+                using (var db = f1.DbConnection())
                 {
                     SQLiteCommand command = db.CreateCommand();
                     command.CommandText = addCommand;

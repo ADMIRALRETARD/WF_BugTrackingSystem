@@ -16,12 +16,12 @@ namespace WF_BugTrackingSystemTest
 
         private Form1 f1;
 
-        SQLiteConnection db;
+
         public FormTaskAdd(Form1 frm)
         {
             InitializeComponent();
             f1 = frm;
-            db=f1.DbConnection();
+
 
             string selectProjects = "Select  ID,ProjectName From Projects";
             string selectUsers = "Select ID,LastName from Users";
@@ -33,6 +33,7 @@ namespace WF_BugTrackingSystemTest
         private void LoadData(string sqlQuery)
         {
             DataTable dt = new DataTable();
+            using (var db = f1.DbConnection())
             using (var adapter = new SQLiteDataAdapter(sqlQuery, db))
             {
                 adapter.Fill(dt);
@@ -50,11 +51,7 @@ namespace WF_BugTrackingSystemTest
                         var cells = row.ItemArray;
                         cbUsers.Items.Add(cells.GetValue(0) + "  [ID] , " + cells.GetValue(1));
                     }
-
-
             }
-            
-
 
         }
 
@@ -72,8 +69,8 @@ namespace WF_BugTrackingSystemTest
             {
                 string addCommand = "INSERT INTO TASKS(ProjectID,Theme,Type,Priority, UserID, Description) " +
                                     "values(@projectID, @theme, @type, @priority, @userID, @description)";
-                
-                using (db = f1.DbConnection())
+
+                using (var db = f1.DbConnection())
                 {
                     SQLiteCommand command = db.CreateCommand();
                     command.CommandText = addCommand;
@@ -89,13 +86,13 @@ namespace WF_BugTrackingSystemTest
                     DialogResult = DialogResult.OK;
                 }
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка сохранения задачи", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
 
-        
+
     }
 }
