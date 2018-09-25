@@ -70,7 +70,6 @@
             this.Name = "FormProjectAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавить Проект";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProjectAdd_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

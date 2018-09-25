@@ -90,7 +90,6 @@
             this.Name = "FormUserAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавить Пользователя";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUserAdd_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

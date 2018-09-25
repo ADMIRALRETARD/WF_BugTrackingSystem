@@ -14,35 +14,41 @@ namespace WF_BugTrackingSystemTest
     public partial class FormProjectAdd : Form
     {
         private Form1 f1;
+        SQLiteConnection db;
         public FormProjectAdd(Form1 frm)
         {
             InitializeComponent();
             f1 = frm;
-            frm.DbConnection();
+            db = f1.DbConnection();
         }
-
-        private void FormProjectAdd_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            f1.ShowDataGrid(Queries.showProjects);
-        }
-
+        
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string addCommand = "INSERT INTO Projects(ProjectName) VALUES(@projectName)";
-            SQLiteCommand command = f1.db.CreateCommand();
-            command.CommandText = addCommand;
-
-            if (tbProjectName.Text != "")
+            try
             {
-                command.Parameters.Add("@projectName", DbType.String).Value = tbProjectName.Text;
-                command.ExecuteNonQuery();
-                ActiveForm.Close();
 
+                using (db = f1.DbConnection())
+                {
+                    SQLiteCommand command = db.CreateCommand();
+                    command.CommandText = addCommand;
+                    if (tbProjectName.Text == "")
+                    {
+                        MessageBox.Show("Не все поля заполнены!");
+                        return;
+
+                    }
+                    command.Parameters.Add("@projectName", DbType.String).Value = tbProjectName.Text;
+                    command.ExecuteNonQuery();
+
+                    DialogResult = DialogResult.OK;
+
+                }
             }
-            else
-                MessageBox.Show("Не все поля заполнены!");
-
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка добавления проект", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

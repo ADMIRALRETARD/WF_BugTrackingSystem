@@ -46,6 +46,7 @@
             this.ProjectListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TasksInProjectTSM = new System.Windows.Forms.ToolStripMenuItem();
             this.UserTasksListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1, 140);
+            this.dataGridView1.Location = new System.Drawing.Point(1, 95);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -64,7 +65,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(875, 140);
+            this.btnAdd.Location = new System.Drawing.Point(875, 95);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 1;
@@ -79,7 +80,7 @@
             "Задачи",
             "Проекты",
             "Пользователи"});
-            this.cbTables.Location = new System.Drawing.Point(1, 113);
+            this.cbTables.Location = new System.Drawing.Point(0, 68);
             this.cbTables.Name = "cbTables";
             this.cbTables.Size = new System.Drawing.Size(118, 21);
             this.cbTables.TabIndex = 2;
@@ -88,7 +89,7 @@
             // 
             // btnDel
             // 
-            this.btnDel.Location = new System.Drawing.Point(875, 169);
+            this.btnDel.Location = new System.Drawing.Point(875, 124);
             this.btnDel.Name = "btnDel";
             this.btnDel.Size = new System.Drawing.Size(75, 23);
             this.btnDel.TabIndex = 3;
@@ -125,19 +126,19 @@
             // OpenToolStripMenuItem
             // 
             this.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem";
-            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.OpenToolStripMenuItem.Text = "Открыть";
             this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(118, 6);
             // 
             // ExitToolStripMenuItem
             // 
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.ExitToolStripMenuItem.Text = "Выход";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -203,11 +204,21 @@
             this.UserTasksListToolStripMenuItem.Text = "Список задач исполнителя";
             this.UserTasksListToolStripMenuItem.Click += new System.EventHandler(this.UserTasksListToolStripMenuItem_Click);
             // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(12, 407);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(115, 13);
+            this.lblCount.TabIndex = 5;
+            this.lblCount.Text = "Количество Записей:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(962, 429);
+            this.Controls.Add(this.lblCount);
             this.Controls.Add(this.btnDel);
             this.Controls.Add(this.cbTables);
             this.Controls.Add(this.btnAdd);
@@ -244,6 +255,7 @@
         private System.Windows.Forms.ToolStripMenuItem UserTasksListToolStripMenuItem;
         public System.Windows.Forms.MenuStrip menuStrip1;
         public System.Windows.Forms.ToolStripMenuItem TasksInProjectTSM;
+        private System.Windows.Forms.Label lblCount;
     }
 }
 

@@ -14,12 +14,13 @@ namespace WF_BugTrackingSystemTest
     public partial class FormUserAdd : Form
     {
         private Form1 f1;
+        SQLiteConnection db;
         public FormUserAdd(Form1 frm)
         {
             InitializeComponent();
 
             f1 = frm;
-            frm.DbConnection();
+            db = f1.DbConnection();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -27,31 +28,32 @@ namespace WF_BugTrackingSystemTest
             try
             {
                 string addCommand = "INSERT INTO USERS(FirstName,LastName) VALUES(@FirstName,@LastName)";
-                SQLiteCommand command = f1.db.CreateCommand();
-                command.CommandText = addCommand;
-
-                if (tbFirstName.Text !="" && tbLastName.Text!="")
+                using (db = f1.DbConnection())
                 {
+                    SQLiteCommand command = db.CreateCommand();
+                    command.CommandText = addCommand;
+
+                    if (tbFirstName.Text == "" && tbLastName.Text == "")
+                    {
+
+                        MessageBox.Show("Не все поля заполнены!");
+                        return;
+                    }
 
                     command.Parameters.Add("@FirstName", DbType.String).Value = tbFirstName.Text;
                     command.Parameters.Add("@LastName", DbType.String).Value = tbLastName.Text;
-
                     command.ExecuteNonQuery();
-                    ActiveForm.Close();
+                    DialogResult = DialogResult.OK;
                 }
-                else
-                MessageBox.Show("Не все поля заполнены!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Ошибка добавления пользователя", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
         }
 
-        private void FormUserAdd_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            f1.ShowDataGrid(Queries.showUsers);
-        }
+        
     }
 }

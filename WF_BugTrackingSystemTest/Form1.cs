@@ -10,17 +10,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WF_BugTrackingSystemTest.AdditionalForms;
 
+
 namespace WF_BugTrackingSystemTest
 {
     public partial class Form1 : Form
     {
         public SQLiteConnection db;
+        SQLiteCommand cmd;
         string tablename;
-
-        FormTaskAdd ftAdd;
-        FormUserAdd fuAdd;
-        FormProjectAdd fpAdd;
-        FormSelect fs;
+        string flag;
+        
         DeleteVal dv;
 
 
@@ -32,40 +31,48 @@ namespace WF_BugTrackingSystemTest
         public Form1()
         {
             InitializeComponent();
-            ftAdd = new FormTaskAdd(this);
-            fuAdd = new FormUserAdd(this);
-            fpAdd = new FormProjectAdd(this);
-            fs = new FormSelect(this);
-            dv=new DeleteVal(this);
+            
+            dv = new DeleteVal(this);
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DbConnection();
             ShowDataGrid(sqlQuery);
         }
-        public void DbConnection()
+        public SQLiteConnection DbConnection()
         {
-            
+
             //db = new SQLiteConnection("Data Source=C:\\Users" +
             //   "\\Gercules\\Documents\\Visual Studio 2017\\Projects\\" +
             //   "WF_BugTrackingSystemTest\\WF_BugTrackingSystemTest\\bin\\Debug\\BugTrackerDB.db;" +
             //   "Version=3");
-            db = new SQLiteConnection("Data Source=BugTrackerDB.db;Version=3");
+            SQLiteConnection db = new SQLiteConnection("Data Source=BugTrackerDB.db;Version=3");
+            cmd = new SQLiteCommand();
+            cmd.Connection = db;
             db.Open();
-
+            return db;
         }
         public void ShowDataGrid(string query)
         {
             sqlQuery = query;
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, db);
             DataSet ds = new DataSet();
-            adapter.Fill(ds);
-            foreach (DataTable dt in ds.Tables)
+            cmd.CommandText = sqlQuery;
+            using (db = DbConnection())
             {
-                dataGridView1.DataSource = dt;
-            }
 
+                using (var adapter = new SQLiteDataAdapter(sqlQuery, db))
+                {
+                    adapter.Fill(ds);
+                    foreach (DataTable dt in ds.Tables)
+                    {
+                        dataGridView1.DataSource = dt;
+                    }
+
+                }
+                lblCount.Text = "Количество записей : " + dataGridView1.RowCount.ToString();
+
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -73,22 +80,41 @@ namespace WF_BugTrackingSystemTest
             switch (tablename)
             {
                 case "Users":
-                    fuAdd.ShowDialog();
+                    using (var fuAdd = new FormUserAdd(this))
+                    {
+                        if (fuAdd.ShowDialog() == DialogResult.OK)
+                        {
+                            ShowDataGrid(sqlQuery);
+                        }
+                    }
+
                     break;
                 case "Projects":
-                    fpAdd.ShowDialog();
+                    using (var fpAdd = new FormProjectAdd(this))
+                    {
+                        if (fpAdd.ShowDialog() == DialogResult.OK)
+                        {
+                            ShowDataGrid(sqlQuery);
+                        }
+                    }
                     break;
                 default:
-                    ftAdd.ShowDialog();
-                    break;
+                    using (var ftAdd = new FormTaskAdd(this))
+                    {
 
+                        if (ftAdd.ShowDialog() == DialogResult.OK)
+                        {
+                            ShowDataGrid(sqlQuery);
+                        }
+                    }
+                    break;
             }
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
             dv.Delete();
-          //  Delete();
+            ShowDataGrid(sqlQuery);
         }
         private void cbTables_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -126,17 +152,29 @@ namespace WF_BugTrackingSystemTest
         {
             ShowDataGrid(Queries.showProjects);
         }
-        
+
         private void TasksInProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
-            fs.ShowDialog();
+            flag = "Tasks";
+            using(var fs=new FormSelect(this,flag))
+            {
+                if (fs.ShowDialog() == DialogResult.OK)
+                { return; }
+            }
+
+            
         }
 
         private void UserTasksListToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            flag = "";
+            using (var fs = new FormSelect(this, flag))
+            {
+                if (fs.ShowDialog() == DialogResult.OK)
+                { return; }
+            }
+
             
-            fs.ShowDialog();
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -147,16 +185,7 @@ namespace WF_BugTrackingSystemTest
             string filename = _openFileDialog.FileName;
             db = new SQLiteConnection("Data Source=" + filename + ";" + "Version=3");
         }
-        //2 Вариант
-        //private void Delete()
-        //{
-        //    string deleteCommand = "DELETE FROM " + tablename + " WHERE ID=@id";
-        //    SQLiteCommand cmd = db.CreateCommand();
-        //    cmd.CommandText = deleteCommand;
-        //    cmd.Parameters.Add("@id", DbType.Int32).Value = dataGridView1.CurrentRow.Cells[0].Value;
-        //    cmd.ExecuteNonQuery();
-        //    ShowDataGrid(sqlQuery);
-        //}
+       
 
     }
 }

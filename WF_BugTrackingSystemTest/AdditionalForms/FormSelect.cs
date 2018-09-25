@@ -14,58 +14,75 @@ namespace WF_BugTrackingSystemTest.AdditionalForms
     public partial class FormSelect : Form
     {
         private Form1 f1;
-        string sqltest;
-        public FormSelect(Form1 frm)
+        string getflag;
+        SQLiteConnection db;
+        public FormSelect(Form1 frm, string flag)
         {
             InitializeComponent();
             f1 = frm;
-            frm.DbConnection();
-            
-            
-            //if (sqltest == "Список задач в проекте")
-            //{
-             LoadData(Queries.showUsers2);
-            //}
-            //else
-            //    LoadData(Queries.showUsers);
+            db = frm.DbConnection();
+            getflag = flag;
+
+            if (getflag == "Tasks")
+            {
+                selector = "Task";
+                LoadData(Queries.showProjects);
+            }
+            else
+            {
+                selector = "User";
+                LoadData(Queries.showUsers2);
+            }
         }
-        
+
         private void LoadData(string sqlQuery)
         {
-            SQLiteDataAdapter adapter1 = new SQLiteDataAdapter(sqlQuery, f1.db);
-            DataTable dt = new DataTable();
-            adapter1.Fill(dt);
+            using (var adapter = new SQLiteDataAdapter(sqlQuery, db))
+            {
 
-            //if (dt.Columns.Contains("ProjectName"))
-            //{
-            //    foreach (DataRow row in dt.Rows)
-            //    {
-            //        var cells = row.ItemArray;
-            //        cbSelect.Items.Add(cells.GetValue(0) + "  [ID] , " + cells.GetValue(1));
-            //    }
-            //}
-            //else
-                foreach (DataRow row in dt.Rows)
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                if (dt.Columns.Contains("ProjectName"))
                 {
-                    var cells = row.ItemArray;
-                    cbSelect.Items.Add(cells.GetValue(0) + "  [ID] , " + cells.GetValue(1));
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        var cells = row.ItemArray;
+                        cbSelect.Items.Add(cells.GetValue(0) + "  [ID] , " + cells.GetValue(1));
+                    }
                 }
+                else
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        var cells = row.ItemArray;
+                        cbSelect.Items.Add(cells.GetValue(0) + "  [ID] , " + cells.GetValue(1));
+                    }
+            }
         }
-
+        public  string selector;
         private void btnSelect_Click(object sender, EventArgs e)
         {
-          //  string selectCommand = "select Theme from Tasks where ProjectID="+cbSelect.Text.Substring(0,3)+"";
-            string selectCommand2 = "select Theme from Tasks where ProjectID=" + cbSelect.Text.Substring(0, 3) + "";
-
-            SQLiteCommand command = f1.db.CreateCommand();
-            command.CommandText = selectCommand2;
-            
-            command.ExecuteScalar();
+            string selectCommand;
+            string Command1 = "select Theme from Tasks where ProjectID=" + cbSelect.Text.Substring(0, 3) + "";
+            string Command2 = "select Theme from Tasks where UserID=" + cbSelect.Text.Substring(0, 3) + "";
            
-            ActiveForm.Close();
-            f1.ShowDataGrid(selectCommand2);
-            
+            if (selector == "Task")
+            {
+                selectCommand = Command1;
 
+            }
+            else
+                selectCommand = Command2;
+            using (db = f1.DbConnection())
+            {
+                SQLiteCommand command = db.CreateCommand();
+                command.CommandText = selectCommand;
+
+                command.ExecuteScalar();
+                DialogResult = DialogResult.OK;
+                f1.ShowDataGrid(selectCommand);
+            }
+            
 
         }
     }

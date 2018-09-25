@@ -174,7 +174,7 @@
             this.Name = "FormTaskAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавить задачу";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTaskAdd_FormClosing);
+            
             this.ResumeLayout(false);
             this.PerformLayout();
 
