@@ -19,7 +19,8 @@ namespace WF_BugTrackingSystemTest
         SQLiteCommand cmd;
         string tablename;
         string flag;
-        
+        string connection;
+
         OpenFileDialog _openFileDialog = new OpenFileDialog();
 
         public string sqlQuery = Queries.showTasks;  // Default display
@@ -36,10 +37,15 @@ namespace WF_BugTrackingSystemTest
         }
         public SQLiteConnection DbConnection()
         {
-
-           //SQLiteConnection db = new SQLiteConnection("Data Source=C:\\Users\\Gercules\\Documents\\tz\\BugTrackerDB.db;Version=3");
+            connection = "Data Source=BugTrackerDB.db;Version=3";
             
-            SQLiteConnection db = new SQLiteConnection("Data Source=BugTrackerDB.db;Version=3");
+            //запуск через диалоговое окно
+            //if (connection == null)
+            //{
+            //    OpenToolStripMenuItem.PerformClick();
+            //}
+
+            SQLiteConnection db = new SQLiteConnection(connection);
             
             cmd = new SQLiteCommand();
             cmd.Connection = db;
@@ -173,7 +179,7 @@ namespace WF_BugTrackingSystemTest
             if (_openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             string filename = _openFileDialog.FileName;
-           var db = new SQLiteConnection("Data Source=" + filename + ";" + "Version=3");
+            connection="Data Source=" + filename + ";" + "Version=3";
             
         }
        
